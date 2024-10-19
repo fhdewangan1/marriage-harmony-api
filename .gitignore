@@ -1,0 +1,46 @@
+# Compiled class files
+*.class
+
+# Logs
+*.log
+log/
+
+# Temporary files
+*.tmp
+
+# Maven specific
+target/
+!src/main/resources/static/
+!src/main/resources/templates/
+
+# IntelliJ IDEA files
+.idea/
+*.iml
+*.iws
+
+# Eclipse files
+.project
+.classpath
+.settings/
+
+# VS Code files
+.vscode/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Java specific
+*.jar
+*.war
+*.ear
+
+# Environment variables file
+.env
+
+# Spring Boot specific
+spring.log
+
+# Dependencies and packages
+.mvn/
+node_modules/
