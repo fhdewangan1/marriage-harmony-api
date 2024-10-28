@@ -30,6 +30,6 @@ public class UserRegistrationProfileDto {
 	private Date updatedTime;
 	private MultipartFile profileImage;
 	private String userRole;
-	private String maildId;
+	private String mailId;
 
 }

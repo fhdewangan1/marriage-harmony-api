@@ -74,18 +74,28 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(AccessDeniedException.class)
-	public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex,WebRequest request) {
+	public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex, WebRequest request) {
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
-				ResponseStructure.createErrorStructure(HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value(),ex.getMessage() , request.getDescription(false)
-						)
-				);
+				ResponseStructure.createErrorStructure(HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value(),
+						ex.getMessage(), request.getDescription(false)));
 	}
-//	new ExtraResponse<String>("err","amit")
+	// new ExtraResponse<String>("err","amit")
 
 	@ExceptionHandler(Exception.class)
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ResponseBody
 	public ErrorResponse handleException(Exception e) {
-		return new ErrorResponse("An unexpected error occurred.", e.getMessage());
+		// Create a new ErrorResponse object
+		ErrorResponse errorResponse = new ErrorResponse();
+
+		// Set the details of the error response
+		errorResponse.setMessage("An unexpected error occurred.");
+		errorResponse.setMessage(e.getMessage());
+		errorResponse.setMessage(e.getClass().getSimpleName());
+		// Log the exception for debugging
+		System.err.println("Exception occurred: " + e);
+
+		return errorResponse;
 	}
+
 }

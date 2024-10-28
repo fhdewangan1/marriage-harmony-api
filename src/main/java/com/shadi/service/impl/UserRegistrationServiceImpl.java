@@ -76,6 +76,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 			map.put("status", HttpStatus.OK.value());
 		} catch (Exception e) {
 			map.put("message", "Profile creation failed");
+			map.put("error", e.getMessage());
 			System.out.println(e);
 		}
 		return map;
@@ -156,9 +157,12 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 		Map<String, Object> map = new HashMap<>();
 
 		// Check if new password and confirm password match
-//		if (!changePasswordDto.getNewPassword().equals(changePasswordDto.getConfirmPassword())) {
-//			throw new GenericException("New Password and confirm password should be the same ...");
-//		}
+		// if
+		// (!changePasswordDto.getNewPassword().equals(changePasswordDto.getConfirmPassword()))
+		// {
+		// throw new GenericException("New Password and confirm password should be the
+		// same ...");
+		// }
 
 		// Find the user by mobile number
 		UserRegistrationProfile isUserPresent = profileRegistrationRepo.findByMobileNumber(mobileNumber);
@@ -184,14 +188,14 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 
 	@Override
 	public void deleteUserByMobNum(String mobileNumber) {
-		Map<String, String>map = new HashMap<>();
+		Map<String, String> map = new HashMap<>();
 		try {
 			profileRegistrationRepo.deleteById(mobileNumber);
 			map.put("message", "User Deleted Successfully");
 		} catch (Exception e) {
 			throw new GenericException("Error during deleting a user");
 		}
-		
+
 	}
-	
+
 }
