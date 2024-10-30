@@ -23,4 +23,6 @@ public interface UserProfileRegistrationRepo extends JpaRepository<UserRegistrat
 	@Modifying(flushAutomatically = true, clearAutomatically = true)
 	@Query("UPDATE UserRegistrationProfile fud  SET fud.password=:password WHERE fud.mobileNumber=:mobileNumber")
 	void updateFinoUserPassword(@Param("password") String password, @Param("mobileNumber") String mobileNumber);
+
+	boolean existsByMobileNumber(String mobileNumber);
 }

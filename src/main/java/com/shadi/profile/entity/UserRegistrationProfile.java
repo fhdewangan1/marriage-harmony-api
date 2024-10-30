@@ -120,6 +120,4 @@ public class UserRegistrationProfile implements UserDetails {
 		return UserDetails.super.isEnabled();
 	}
 
-	
-
 }

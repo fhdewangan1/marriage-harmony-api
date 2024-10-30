@@ -1,7 +1,6 @@
 package com.shadi.exception.handle;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +21,6 @@ import com.shadi.exception.NotFoundException;
 import com.shadi.utils.AppConstants;
 import com.shadi.utils.ConstantValues;
 import com.shadi.utils.ErrorResponse;
-import com.shadi.utils.ExtraResponse;
 import com.shadi.utils.ResponseStructure;
 
 @RestControllerAdvice
@@ -41,61 +39,58 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(NotFoundException.class)
 	public ResponseEntity<Map<Object, Object>> noDataAvailable(NotFoundException notFoundException,
 			WebRequest request) {
-
-		CustomException customException = new CustomException(AppConstants.Not_Found, AppConstants.Not_Found_desc,
+		CustomException customException = new CustomException(AppConstants.Not_Found,
+				AppConstants.Not_Found_desc,
 				LocalDateTime.now(), notFoundException.getMessage(), request.getDescription(false));
+
 		Map<Object, Object> notFound = new HashMap<>();
 		notFound.put(AppConstants.statusCode, customException.getStatusCode());
 		notFound.put(AppConstants.status, customException.getStatus());
 		notFound.put(AppConstants.timeStamp, customException.getTimestamp().toString());
 		notFound.put(AppConstants.statusMessage, customException.getMessage());
 		notFound.put(AppConstants.description, customException.getDescription());
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(notFound);
 
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(notFound);
 	}
 
 	@ExceptionHandler(InternalServerError.class)
 	public ResponseEntity<Map<Object, Object>> internalServerError(InternalServerError internalServerError,
 			WebRequest request) {
-
-		CustomException badRequestException = new CustomException(AppConstants.Internal_Server_Error,
-				AppConstants.Internal_Server_Error_desc, LocalDateTime.now(), internalServerError.getMessage(),
-				request.getDescription(false));
+		CustomException customException = new CustomException(AppConstants.Internal_Server_Error,
+				AppConstants.Internal_Server_Error_desc, LocalDateTime.now(),
+				internalServerError.getMessage(), request.getDescription(false));
 
 		Map<Object, Object> internalServerErrorMap = new HashMap<>();
+		internalServerErrorMap.put(AppConstants.statusCode, customException.getStatusCode());
+		internalServerErrorMap.put(AppConstants.status, customException.getStatus());
+		internalServerErrorMap.put(AppConstants.timeStamp, customException.getTimestamp().toString());
+		internalServerErrorMap.put(AppConstants.statusMessage, customException.getMessage());
+		internalServerErrorMap.put(AppConstants.description, customException.getDescription());
 
-		internalServerErrorMap.put(AppConstants.statusCode, badRequestException.getStatusCode());
-		internalServerErrorMap.put(AppConstants.status, badRequestException.getStatus());
-		internalServerErrorMap.put(AppConstants.timeStamp, badRequestException.getTimestamp().toString());
-		internalServerErrorMap.put(AppConstants.statusMessage, badRequestException.getMessage());
-		internalServerErrorMap.put(AppConstants.description, badRequestException.getDescription());
 		return ResponseEntity.internalServerError().body(internalServerErrorMap);
-
 	}
 
 	@ExceptionHandler(AccessDeniedException.class)
 	public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex, WebRequest request) {
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
-				ResponseStructure.createErrorStructure(HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value(),
+				ResponseStructure.createErrorStructure(HttpStatus.FORBIDDEN,
+						HttpStatus.FORBIDDEN.value(),
 						ex.getMessage(), request.getDescription(false)));
 	}
-	// new ExtraResponse<String>("err","amit")
 
 	@ExceptionHandler(Exception.class)
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ResponseBody
 	public ErrorResponse handleException(Exception e) {
-		// Create a new ErrorResponse object
 		ErrorResponse errorResponse = new ErrorResponse();
 
 		// Set the details of the error response
-		errorResponse.setMessage("An unexpected error occurred.");
-		errorResponse.setMessage(e.getMessage());
-		errorResponse.setMessage(e.getClass().getSimpleName());
+		errorResponse.setMessage("An unexpected error occurred."); // General error message
+		errorResponse.setDetails(e.getMessage()); // Specific error message
+
 		// Log the exception for debugging
 		System.err.println("Exception occurred: " + e);
 
 		return errorResponse;
 	}
-
 }

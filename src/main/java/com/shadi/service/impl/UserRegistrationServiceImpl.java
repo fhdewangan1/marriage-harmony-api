@@ -58,7 +58,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 			userRegistrationProfile.setResidence(dto.getResidence());
 			userRegistrationProfile.setReligion(dto.getReligion());
 			userRegistrationProfile.setDob(dto.getDob());
-			userRegistrationProfile.setUserMailId(dto.getMaildId());
+			userRegistrationProfile.setUserMailId(dto.getMailId());
 			userRegistrationProfile.setCreatedTime(LocalDateTime.now());
 
 			if (dto.getProfileImage() != null && !dto.getProfileImage().isEmpty()) {
@@ -133,7 +133,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 			existingProfile.setReligion(dto.getReligion());
 			existingProfile.setDob(dto.getDob());
 			existingProfile.setUpdatedTime(LocalDateTime.now());
-			existingProfile.setUserMailId(dto.getMaildId());
+			existingProfile.setUserMailId(dto.getMailId());
 
 			// Update the profile image if present
 			if (dto.getProfileImage() != null && !dto.getProfileImage().isEmpty()) {
