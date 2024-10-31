@@ -2,8 +2,6 @@ package com.shadi.controller;
 
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,8 +23,6 @@ import org.springframework.http.MediaType;
 @RequestMapping("/api/v1/auth")
 public class UserProfileController {
 
-    private static final Logger log = LoggerFactory.getLogger(UserProfileController.class); // Logger instance
-
     @Autowired
     private UserRegistrationService userRegistrationService;
 
@@ -35,8 +31,6 @@ public class UserProfileController {
 
     @PostMapping(value = "/create-profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Map<String, Object>> createUserProfile(@ModelAttribute UserRegistrationProfileDto dto) {
-        log.info("Received UserRegistrationProfileDto: {}", dto); // Log received DTO
-
         // Validate required fields
         if (dto.getMobileNumber() == null || dto.getFirstName() == null) {
             return ResponseEntity.badRequest().body(Map.of("message", "Mobile number and first name are required"));
@@ -44,7 +38,6 @@ public class UserProfileController {
 
         // Call the service to create the profile
         Map<String, Object> response = userRegistrationService.createProfile(dto);
-        log.info("User profile created: {}", response); // Log after profile creation
         return ResponseEntity.status(201).body(response); // Return response
     }
 
@@ -57,7 +50,6 @@ public class UserProfileController {
 
     @PutMapping("/update-profile")
     public ResponseEntity<Map<String, Object>> updateUserProfile(@RequestBody UserRegistrationProfileDto dto) {
-        log.info("Updating user profile: {}", dto);
         return ResponseEntity.status(200).body(userRegistrationService.updateProfile(dto));
     }
 

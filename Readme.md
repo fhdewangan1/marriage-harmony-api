@@ -16,9 +16,9 @@ marriage-harmony-api
 │   │   │   │   ├── JwtHelpers.java
 │   │   │   │   └── ShadiConfiguration.java
 │   │   │   ├── Controllers
-│   │   │   │   ├── ImageUploadController.java
 │   │   │   │   ├── SearchDetailsController.java
 │   │   │   │   ├── UserFamilyDetailsController.java
+│   │   │   │   ├── UserImageUploadController.java
 │   │   │   │   ├── UserLifeStyleAndEducationController.java
 │   │   │   │   ├── UserPartnerPreferencesController.java
 │   │   │   │   ├── UserPersonalDetailsController.java
@@ -27,7 +27,7 @@ marriage-harmony-api
 │   │   │   ├── entity
 │   │   │   │   ├── SearchDetails.java
 │   │   │   │   ├── UserFamilyDetails.java
-│   │   │   │   ├── UserImage.java
+│   │   │   │   ├── UserImageEntity.java
 │   │   │   │   ├── UserLifeStyleAndEducation.java
 │   │   │   │   ├── UserPartnerPreferences.java
 │   │   │   │   └── UserPersonalDetails.java
@@ -54,7 +54,7 @@ marriage-harmony-api
 │   │   │   ├── repo
 │   │   │   │   ├── SearchDetailsRepo.java
 │   │   │   │   ├── UserFamilyDetailsRepo.java
-│   │   │   │   ├── UserImageRepo.java
+│   │   │   │   ├── UserUploadImageRepo.java
 │   │   │   │   ├── UserLifeStyleAndEducationRepo.java
 │   │   │   │   ├── UserPartnerPreferencesRepo.java
 │   │   │   │   ├── UserPersonalDetailsRepo.java

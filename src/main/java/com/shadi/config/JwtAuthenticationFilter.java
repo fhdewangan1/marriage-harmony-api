@@ -32,23 +32,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-
-
 	@Autowired
 	private UserService userService;
 	@Autowired
 	private JwtHelpers jwtHelpers;
-//	private List<String> skipUrls = Arrays.asList("/api/v1/auth/**","/api/v1/user/**","/api/v1/admin/**","/api/**");
+	// private List<String> skipUrls =
+	// Arrays.asList("/api/v1/auth/**","/api/v1/user/**","/api/v1/admin/**","/api/**");
 	private List<String> skipUrls = Arrays.asList("/api/**");
-	
-	
+
 	@Override
 	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-		
-		return this.skipUrls.stream().anyMatch(url->new AntPathRequestMatcher(url).matches(request)) ;
-	}
 
-	
+		return this.skipUrls.stream().anyMatch(url -> new AntPathRequestMatcher(url).matches(request));
+	}
 
 	@SuppressWarnings("null")
 	@Override
@@ -57,21 +53,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		final String requestTokenHeader = request.getHeader("Authorization");
 		String mobileNumber = null;
 		String jwtToken = null;
-		log.info("token:- " + requestTokenHeader);
-	    final ObjectMapper mapper = new ObjectMapper();	
+		final ObjectMapper mapper = new ObjectMapper();
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 		final Map<String, Object> errorMap = new HashMap<>();
-
 
 		try {
 			if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
 				jwtToken = requestTokenHeader.substring(7);
 				mobileNumber = this.jwtHelpers.getUsernameFromToken(jwtToken);
-				System.out.println("mob " +mobileNumber);
+				System.out.println("mob " + mobileNumber);
 				if (mobileNumber != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 					UserRegistrationProfile profile = this.userService.loadUserByUsername(mobileNumber);
-					System.out.println("profile " +profile);
+					System.out.println("profile " + profile);
 
 					if (this.jwtHelpers.validateToken(jwtToken, profile)) {
 						UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
@@ -88,31 +82,33 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 					log.warn("JWT Token does not begin with Bearer String");
 				}
 
-			}else {
+			} else {
 				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-				
+
 				System.out.println("un auth---------------");
-				CustomException authorisedExe = new CustomException(AppConstants.Unauthorized, AppConstants.Unauthorized_desc,
-						LocalDateTime.now(), "Token is null",request.getServletPath());
-						errorMap.put(AppConstants.statusCode, authorisedExe.getStatusCode());
-						errorMap.put(AppConstants.status, authorisedExe.getStatus());
-						errorMap.put(AppConstants.timeStamp, authorisedExe.getTimestamp().toString());
-						errorMap.put(AppConstants.statusMessage, authorisedExe.getMessage());
-						errorMap.put(AppConstants.description, request.getServletPath());
-						mapper.writeValue(response.getOutputStream(), errorMap);
+				CustomException authorisedExe = new CustomException(AppConstants.Unauthorized,
+						AppConstants.Unauthorized_desc,
+						LocalDateTime.now(), "Token is null", request.getServletPath());
+				errorMap.put(AppConstants.statusCode, authorisedExe.getStatusCode());
+				errorMap.put(AppConstants.status, authorisedExe.getStatus());
+				errorMap.put(AppConstants.timeStamp, authorisedExe.getTimestamp().toString());
+				errorMap.put(AppConstants.statusMessage, authorisedExe.getMessage());
+				errorMap.put(AppConstants.description, request.getServletPath());
+				mapper.writeValue(response.getOutputStream(), errorMap);
 			}
 
 		}
 
 		catch (Exception e) {
-		CustomException authorisedExe = new CustomException(AppConstants.Unauthorized, AppConstants.Unauthorized_desc,
-		LocalDateTime.now(), e.getMessage(),request.getServletPath());
-		errorMap.put(AppConstants.statusCode, authorisedExe.getStatusCode());
-		errorMap.put(AppConstants.status, authorisedExe.getStatus());
-		errorMap.put(AppConstants.timeStamp, authorisedExe.getTimestamp().toString());
-		errorMap.put(AppConstants.statusMessage, authorisedExe.getMessage());
-		errorMap.put(AppConstants.description, request.getServletPath());
-		mapper.writeValue(response.getOutputStream(), errorMap);
+			CustomException authorisedExe = new CustomException(AppConstants.Unauthorized,
+					AppConstants.Unauthorized_desc,
+					LocalDateTime.now(), e.getMessage(), request.getServletPath());
+			errorMap.put(AppConstants.statusCode, authorisedExe.getStatusCode());
+			errorMap.put(AppConstants.status, authorisedExe.getStatus());
+			errorMap.put(AppConstants.timeStamp, authorisedExe.getTimestamp().toString());
+			errorMap.put(AppConstants.statusMessage, authorisedExe.getMessage());
+			errorMap.put(AppConstants.description, request.getServletPath());
+			mapper.writeValue(response.getOutputStream(), errorMap);
 
 		}
 
