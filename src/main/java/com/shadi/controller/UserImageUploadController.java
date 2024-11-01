@@ -47,6 +47,9 @@ public class UserImageUploadController {
                     image7, image8, image9, image10, mobileNumber);
             return ResponseEntity.ok(new ImageUploadResponse(true,
                     "Successfully uploaded images with ID: " + uploadedImageId, List.of(uploadedImageId)));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ImageUploadResponse(false, e.getMessage(), null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ImageUploadResponse(false, "Failed to upload images: " + e.getMessage(), null));

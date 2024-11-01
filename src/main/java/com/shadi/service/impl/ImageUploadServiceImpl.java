@@ -36,6 +36,10 @@ public class ImageUploadServiceImpl implements ImageUploadService {
             throw new RuntimeException("No user found with mobile number: " + mobileNumber);
         }
 
+        if (userImageRepo.findByMobileNumber(mobileNumber).size() > 0) {
+            throw new RuntimeException("Mobile number already exists in user_images. Please use PUT method to update.");
+        }
+
         UserImageUploadEntity userImage = new UserImageUploadEntity();
         userImage.setMobileNumber(mobileNumber);
 
